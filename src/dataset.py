@@ -17,10 +17,9 @@ def init(shuffle=False, seed=None):
     if "SUBDIR_IMAGES_PATTERN" in os.environ:
         SUBDIR_IMAGES_PATTERN = os.environ["SUBDIR_IMAGES_PATTERN"]
         SUBDIR_IMAGES_PATTERN = SUBDIR_IMAGES_PATTERN.split(",")
-        all_image_paths = {
-            os.path.basename(x): x
-            for x in glob(os.path.join(DATASETPATH, *SUBDIR_IMAGES_PATTERN))
-        }
+        fullpath = os.path.join(DATASETPATH, *SUBDIR_IMAGES_PATTERN)
+        print(f"FULL PATH PATTERN TO FIND IMAGES: {fullpath}")
+        all_image_paths = {os.path.basename(x): x for x in glob(fullpath)}
         print(
             "Loaded dataset and images paths\nScans found:",
             len(all_image_paths),

@@ -4,4 +4,17 @@ services:
   simulator:
     image: andersonbr/radiology-simulator
     build: ./
-    command: python run.py
+    volumes:
+      - ./src:/opt/app
+      - /Users/anderson/Dev/MDCC/archive/CHEST_XRAY:/dataset
+    command: python -u run.py
+    # command: ls /dataset
+    env_file:
+      - .env
+    networks:
+      - dicom
+
+networks:
+  dicom:
+    external:
+      name: dicom

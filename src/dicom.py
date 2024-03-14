@@ -61,14 +61,15 @@ def create_dicom(
     ds.file_meta.FileMetaInformationGroupLength = 206
     ds.file_meta.FileMetaInformationVersion = b"\x00\x01"
     ds.file_meta.MediaStorageSOPClassUID = (
-        " Digital X-Ray Image Storage - For Presentation"
+        DigitalXRayImageStorageForPresentation  # "1.2.840.10008.5.1.4.1.1.1.1"
     )
     ds.file_meta.MediaStorageSOPInstanceUID = (
-        "1.3.51.0.7.1209738733.5000.23372.38822.58758.64857.30388"
-    )
-    ds.file_meta.ImplementationClassUID = "1.2.276.0.7238010.5.0.3.5.4"
+        generate_uid()
+    )  # ("1.3.51.0.7.1209738733.5000.23372.38822.58758.64857.30388")
+    ds.file_meta.ImplementationClassUID = (
+        generate_uid()
+    )  # "1.2.276.0.7238010.5.0.3.5.4"
     ds.file_meta.TransferSyntaxUID = ImplicitVRLittleEndian
-    ds.file_meta.ImplementationClassUID = "1.2.276.0.7238010.5.0.3.5.4"
     ds.file_meta.ImplementationVersionName = "OSIRIX"
     ds.file_meta.SourceApplicationEntityTitle = "AIHEALTH"
     #     (0002, 0000) File Meta Information Group Length  UL: 206
@@ -81,7 +82,9 @@ def create_dicom(
     # (0002, 0016) Source Application Entity Title     AE: 'AIHEALTH'
 
     # ds.TransferSyntaxUID = ExplicitVRLittleEndian
-    ds.SOPClassUID = "1.2.840.10008.5.1.4.1.1.1.1"
+    ds.SOPClassUID = (
+        DigitalXRayImageStorageForPresentation  # "1.2.840.10008.5.1.4.1.1.1.1"
+    )
     # Gerar novos UID para StudyInstanceUID, SeriesInstanceUID e SOPInstanceUID
     ds.StudyInstanceUID = generate_uid()
     ds.SeriesInstanceUID = generate_uid()
