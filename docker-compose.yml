@@ -1,0 +1,7 @@
+version: "3"
+
+services:
+  simulator:
+    image: andersonbr/radiology-simulator
+    build: ./
+    command: python run.py
