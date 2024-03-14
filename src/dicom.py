@@ -100,7 +100,7 @@ def create_dicom(
     ds.ViewPosition = metadata["View Position"]
     ds.InstanceNumber = 1
     ds.StudyDescription = region
-    ds.photometric_interpretation = metadata["Finding Labels"]
+    ds.InstanceComments = metadata["Finding Labels"]
     ds.SeriesDescription = f"{region} {metadata['View Position']}"
     current_date = get_current_date()
     ds.StudyDate = current_date
