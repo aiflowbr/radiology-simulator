@@ -161,6 +161,9 @@ def gen_random_dcm(df, paths):
             ds,
             fp.name,  # "example.dcm",  # "IM-0001-0001.dcm",
         )
+        print(f"**********************************")
+        print(f"FINDING LABELS: {img_ds['Finding Labels']}")
+        print(f"**********************************")
 
 
 def create_dicom_test():

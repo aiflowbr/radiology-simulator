@@ -2,3 +2,4 @@
 __pycache__
 *.dcm
 .DS_Store
+/orthanc/db/

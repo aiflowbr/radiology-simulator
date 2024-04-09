@@ -6,7 +6,7 @@ services:
     build: ./
     volumes:
       - ./src:/opt/app
-      - /Users/anderson/Dev/MDCC/archive/CHEST_XRAY:/dataset
+      - /home/anderson/Dev/MDCC/chest_xray:/dataset
     command: python -u run.py
     # command: ls /dataset
     env_file:
@@ -21,6 +21,8 @@ services:
     ports:
       - 4242:4242
       - 8042:8042
+    networks:
+      - dicom
 
 networks:
   dicom:
