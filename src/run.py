@@ -11,7 +11,8 @@ df, paths = dataset.init(shuffle=True, seed=42)
 
 # Função que será chamada periodicamente
 def send():
-    print("Gen data")
+    print("***************")
+    print("Generating data")
     dicom.gen_random_dcm(df, paths)
 
 
