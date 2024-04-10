@@ -58,6 +58,11 @@
       "AET": "ROBOT",
       "Host": "simulator",
       "Port": 10000
+    },
+    "AIHEALTHMAC": {
+      "AET": "AIHEALTHMAC",
+      "Host": "host.docker.internal",
+      "Port": 11112
     }
   },
   "DicomModalitiesInDatabase": false,

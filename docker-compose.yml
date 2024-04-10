@@ -6,7 +6,7 @@ services:
     build: ./
     volumes:
       - ./src:/opt/app
-      - /home/anderson/Dev/MDCC/chest_xray:/dataset
+      - ${LOCAL_DATASET_PATH}:/dataset
     command: python -u run.py
     # command: ls /dataset
     env_file:

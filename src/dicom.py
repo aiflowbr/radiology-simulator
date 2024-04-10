@@ -1,5 +1,6 @@
 import numpy as np
 from datetime import datetime
+import pytz
 from PIL import Image
 from pydicom import Dataset, read_file, dcmwrite, FileDataset
 from pydicom.uid import (
@@ -16,15 +17,31 @@ import os
 import random
 
 
+def get_timezone():
+    # Verifica se a variável de ambiente TZ está definida
+    if "TZ" in os.environ:
+        # Se estiver definida, usa o valor da variável de ambiente
+        return pytz.timezone(os.environ["TZ"])
+    else:
+        # Se não estiver definida, usa o fuso horário "America/Fortaleza"
+        return pytz.timezone("America/Fortaleza")
+
+
 # Função para obter a data atual no formato DICOM
 def get_current_date():
-    current_date = datetime.now()
+    current_date = datetime.now(get_timezone())
     return current_date.strftime("%Y%m%d")
+
+
+# Função para obter a hora atual no formato DICOM
+def get_current_time():
+    current_date = datetime.now(get_timezone())
+    return current_date.strftime("%H%M%S.%f")
 
 
 def calculate_birth_date(age):
     # Obtenha o ano atual
-    current_year = datetime.now().year
+    current_year = datetime.now(get_timezone()).year
 
     # Subtraia a idade do ano atual para obter o ano de nascimento
     birth_year = current_year - age
@@ -46,7 +63,7 @@ def read_image(image_path, conv_grayscale=False, conv_rgb=False):
     return image
 
 
-def create_dicom(
+def (
     image_path, output, modality, region, metadata, conv_grayscale=False, conv_rgb=False
 ):
     print(f"Image input path: {image_path}")
@@ -104,11 +121,18 @@ def create_dicom(
     ds.InstanceNumber = 1
     ds.StudyDescription = region
     ds.InstanceComments = metadata["Finding Labels"]
+    ds.Findings = metadata["Finding Labels"]
+    ds.Interpretation = metadata["Finding Labels"]
+    ds.PatientDiagnosis = metadata["Finding Labels"]
     ds.SeriesDescription = f"{region} {metadata['View Position']}"
     current_date = get_current_date()
+    current_time = get_current_time()
     ds.StudyDate = current_date
+    ds.StudyTime = current_time
     ds.SeriesDate = current_date
+    ds.SeriesTime = current_time
     ds.AcquisitionDate = current_date
+    ds.AcquisitionTime = current_time
     # Defina os atributos obrigatórios
     ds.is_little_endian = True
     ds.is_implicit_VR = True
@@ -143,7 +167,7 @@ def gen_random_dcm(df, paths):
     print(img_ds)
     with tempfile.NamedTemporaryFile(suffix=".dcm", delete=True) as fp:
         print(f"path: {fp.name}")
-        ds = create_dicom(
+        ds = (
             paths[img_ds["Image Index"]],
             fp.name,
             MODALITY,
@@ -152,7 +176,7 @@ def gen_random_dcm(df, paths):
             conv_grayscale=False,
             conv_rgb=False,
         )
-        # ds_test = create_dicom_test()
+        # ds_test = _test()
         # ds_test.save_as("example.dcm")
         send_to_server(
             os.environ["AETITLE"],
@@ -166,7 +190,7 @@ def gen_random_dcm(df, paths):
         print(f"**********************************")
 
 
-def create_dicom_test():
+def _test():
     ds = Dataset()
 
     # Defina os atributos obrigatórios
