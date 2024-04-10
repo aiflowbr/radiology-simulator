@@ -13,6 +13,8 @@ services:
       - .env
     networks:
       - dicom
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   pacs:
     image: jodogne/orthanc:1.12.3
     volumes:
@@ -23,6 +25,8 @@ services:
       - 8042:8042
     networks:
       - dicom
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
 networks:
   dicom:

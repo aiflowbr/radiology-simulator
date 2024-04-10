@@ -63,7 +63,7 @@ def read_image(image_path, conv_grayscale=False, conv_rgb=False):
     return image
 
 
-def (
+def create_dicom(
     image_path, output, modality, region, metadata, conv_grayscale=False, conv_rgb=False
 ):
     print(f"Image input path: {image_path}")
@@ -167,7 +167,7 @@ def gen_random_dcm(df, paths):
     print(img_ds)
     with tempfile.NamedTemporaryFile(suffix=".dcm", delete=True) as fp:
         print(f"path: {fp.name}")
-        ds = (
+        ds = create_dicom(
             paths[img_ds["Image Index"]],
             fp.name,
             MODALITY,
@@ -176,7 +176,7 @@ def gen_random_dcm(df, paths):
             conv_grayscale=False,
             conv_rgb=False,
         )
-        # ds_test = _test()
+        # ds_test = create_dicom_test()
         # ds_test.save_as("example.dcm")
         send_to_server(
             os.environ["AETITLE"],
@@ -190,7 +190,7 @@ def gen_random_dcm(df, paths):
         print(f"**********************************")
 
 
-def _test():
+def create_dicom_test():
     ds = Dataset()
 
     # Defina os atributos obrigatórios
