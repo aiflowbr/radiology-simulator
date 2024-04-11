@@ -30,5 +30,5 @@ services:
 
 networks:
   dicom:
-    external:
-      name: dicom
+    name: dicom
+    external: true

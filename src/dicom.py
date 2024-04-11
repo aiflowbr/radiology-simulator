@@ -27,6 +27,20 @@ def get_timezone():
         return pytz.timezone("America/Fortaleza")
 
 
+def get_timezone_offset():
+    # Obtém o fuso horário especificado
+    timezone = get_timezone()
+
+    # Obtém o offset em relação ao UTC para o fuso horário
+    offset = timezone.utcoffset(datetime.now())
+
+    # Converte o offset para segundos
+    offset_seconds = offset.total_seconds()
+
+    # Retorna o offset em horas
+    return int(offset_seconds / 3600)
+
+
 # Função para obter a data atual no formato DICOM
 def get_current_date():
     current_date = datetime.now(get_timezone())
@@ -120,10 +134,10 @@ def create_dicom(
     ds.ViewPosition = metadata["View Position"]
     ds.InstanceNumber = 1
     ds.StudyDescription = region
-    ds.InstanceComments = metadata["Finding Labels"]
-    ds.Findings = metadata["Finding Labels"]
-    ds.Interpretation = metadata["Finding Labels"]
-    ds.PatientDiagnosis = metadata["Finding Labels"]
+    ds.ImageComments = metadata["Finding Labels"]
+    # ds.Findings = metadata["Finding Labels"]
+    # ds.Interpretation = metadata["Finding Labels"]
+    # ds.PatientDiagnosis = metadata["Finding Labels"]
     ds.SeriesDescription = f"{region} {metadata['View Position']}"
     current_date = get_current_date()
     current_time = get_current_time()
@@ -133,6 +147,7 @@ def create_dicom(
     ds.SeriesTime = current_time
     ds.AcquisitionDate = current_date
     ds.AcquisitionTime = current_time
+    ds.TimezoneOffsetFromUTC = str(get_timezone_offset())
     # Defina os atributos obrigatórios
     ds.is_little_endian = True
     ds.is_implicit_VR = True
@@ -159,10 +174,11 @@ def create_dicom(
     return ds
 
 
-def gen_random_dcm(df, paths):
+def gen_random_dcm(df, paths, generator):
     MODALITY = os.environ["MODALITY"]
 
-    idx = random.randint(0, len(df) - 1)
+    # idx = random.randint(0, len(df) - 1)
+    idx = generator.next_index()
     img_ds = df.loc[idx]
     print(img_ds)
     with tempfile.NamedTemporaryFile(suffix=".dcm", delete=True) as fp:
@@ -188,6 +204,25 @@ def gen_random_dcm(df, paths):
         print(f"**********************************")
         print(f"FINDING LABELS: {img_ds['Finding Labels']}")
         print(f"**********************************")
+
+
+class NonRepeatingIndexGenerator:
+    def __init__(self, universe_size):
+        self.universe_size = universe_size
+        self.indices = np.arange(universe_size)
+        self.shuffle_indices()
+        self.current_index = 0
+
+    def shuffle_indices(self):
+        np.random.shuffle(self.indices)
+        self.current_index = 0
+
+    def next_index(self):
+        if self.current_index >= self.universe_size:
+            self.shuffle_indices()
+        index = self.indices[self.current_index]
+        self.current_index += 1
+        return index
 
 
 def create_dicom_test():

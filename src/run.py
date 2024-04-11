@@ -7,13 +7,14 @@ import tempfile
 import random
 
 df, paths = dataset.init(shuffle=True, seed=42)
+num_generator = dicom.NonRepeatingIndexGenerator(len(df))
 
 
 # Função que será chamada periodicamente
 def send():
     print("***************")
     print("Generating data")
-    dicom.gen_random_dcm(df, paths)
+    dicom.gen_random_dcm(df, paths, num_generator)
 
 
 # Criando uma instância de CronManager
