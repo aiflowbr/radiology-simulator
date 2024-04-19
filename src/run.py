@@ -28,7 +28,7 @@ def send():
 # try:
 while True:
     send()
-    time.sleep(10)
+    time.sleep(30)
 # except KeyboardInterrupt:
 # Se o usuário pressionar Ctrl+C, pare o CronManager
 # cron_manager.stop()
